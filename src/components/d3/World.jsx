@@ -88,7 +88,7 @@ class World extends Component {
 				.attr('cy', function(d) {
 					return projection([d.long, d.lat])[1]
 				})
-				.on('mouseover', d => {
+				.on('mouseover', function (d) {
 					d3.select(this)
 				.classed('city-circle--active', true)
 				.attr('r', function(d) {
@@ -96,7 +96,7 @@ class World extends Component {
 				})
 					setActiveMapProperties(d)
 				})
-				.on('mouseout', () => {
+				.on('mouseout', function () {
 					d3.select(this)
 					.classed('city-circle--active', false)
 					.attr('r', function(d) {
