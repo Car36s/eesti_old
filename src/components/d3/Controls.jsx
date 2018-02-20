@@ -27,7 +27,7 @@ class Controls extends Component {
 
 	render() {
 
-		const { citiesVisibility, citiesLabelsVisibility } = this.props
+		const { citiesVisibility, citiesLabelsVisibility, onToggleHighLightCities, highlightCitiesOnHover } = this.props
 
 		const cityButtonLabel = citiesVisibility ? 'Peida linnad' : 'Näita linnad'
 		const cityLabelButtonLabel = citiesLabelsVisibility ? 'Peida nimed' : 'Linnade nimed'
@@ -49,6 +49,14 @@ class Controls extends Component {
             { citiesVisibility && <button type="button" onClick={this.props.toggleCitiesLabelsVisibility}>{cityLabelButtonLabel}</button> }
 
             <input type="text" placeholder="sisesta linn/maakond/alev" onKeyDown={this.onSubmit} />
+
+			Cities on hoover:
+			<input
+				type="checkbox"
+				name="toggleHighLightCities"
+				onChange={onToggleHighLightCities}
+				checked={highlightCitiesOnHover}
+			/>
         </div>
 	}
 }

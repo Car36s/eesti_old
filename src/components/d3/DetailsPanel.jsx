@@ -25,10 +25,7 @@ class DetailsPanel extends Component {
 
 	componentWillReceiveProps(nextProps) {
 		if(nextProps.properties !== this.props.properties) {
-			this.setState({ ...getDetails(nextProps.properties) }, (state) => {
-				// eslint-disable-next-line
-				console.log(this.state.name, this.state.type, state)
-			})
+			this.setState({ ...getDetails(nextProps.properties) })
 		}
 	}
 
@@ -36,7 +33,7 @@ class DetailsPanel extends Component {
 		const { name, type } = this.state
 
 		return <div className="details-panel">
-            <h1>DetailsPanel</h1>
+            <h1>Details Panel</h1>
             {name + ' ' + type.toLowerCase()}
             <DisplayImages name={name} type={type} />
         </div>

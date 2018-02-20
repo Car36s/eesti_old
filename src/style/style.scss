@@ -20,6 +20,7 @@ html, body, #App {
 
 .content {
     flex-grow: 1;
+    background-color: #FAFAFA;
 
     .controls {
         height: 50px;
@@ -39,7 +40,7 @@ html, body, #App {
         }
 
         .eesti {
-            fill: #7d7d7d;
+            fill: #206716;
             stroke: #686868;
 
             &--active {
@@ -49,10 +50,9 @@ html, body, #App {
         }
 
         //lakes
-        .peipsi,
-        .võrtsjärve {
-            fill: #efefef;
-            stroke: #efefef;
+        .water-body {
+            fill: #8bd2ff;
+                stroke: #5985d2;
         }
 
         .city-circle {

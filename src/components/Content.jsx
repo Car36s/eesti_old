@@ -11,18 +11,19 @@ class Content extends Component {
 			activeTile: '',
 			citiesVisibility: false,
 			citiesLabelsVisibility: false,
+			highlightCitiesOnHover: false,
 		}
 
 		this.setMapDetailLevel = this.setMapDetailLevel.bind(this)
 		this.toggleCitiesVisibility = this.toggleCitiesVisibility.bind(this)
 		this.toggleCitiesLabelsVisibility = this.toggleCitiesLabelsVisibility.bind(this)
 		this.setActiveTile = this.setActiveTile.bind(this)
+		this.onToggleHighLightCities = this.onToggleHighLightCities.bind(this)
 	}
 
 	setMapDetailLevel(level) {
 		this.setState({ mapDetailLevel: level })
 	}
-
 	toggleCitiesVisibility() {
 		this.setState({ citiesVisibility: !this.state.citiesVisibility })
 	}
@@ -32,9 +33,19 @@ class Content extends Component {
 	setActiveTile(activeTile) {
 		this.setState({ activeTile })
 	}
+	onToggleHighLightCities() {
+		this.setState({ highlightCitiesOnHover: !this.state.highlightCitiesOnHover })
+	}
 
 	render() {
-		const { activeTile, mapDetailLevel, citiesVisibility, citiesLabelsVisibility } = this.state
+		const {
+			activeTile,
+			mapDetailLevel,
+			citiesVisibility,
+			citiesLabelsVisibility,
+			highlightCitiesOnHover,
+		} = this.state
+
 		return (
             <div className="content">
                 <Controls
@@ -45,12 +56,15 @@ class Content extends Component {
                     citiesLabelsVisibility={citiesLabelsVisibility}
                     citiesVisibility={citiesVisibility}
                     setActiveTile={this.setActiveTile}
+					highlightCitiesOnHover={highlightCitiesOnHover}
+					onToggleHighLightCities={this.onToggleHighLightCities}
                     />
                 <World
                     mapDetailLevel={mapDetailLevel}
                     citiesVisibility={citiesVisibility}
                     citiesLabelsVisibility={citiesLabelsVisibility}
                     activeTile={activeTile}
+					highlightCitiesOnHover={highlightCitiesOnHover}
                     />
             </div>
 		)

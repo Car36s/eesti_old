@@ -69,9 +69,8 @@ class World extends Component {
 	}
 
 
-	updateCitiesVisibility(type, visibility) {
+	updateCitiesVisibility(type, visibility, properties = null) {
 		const { cities, projection } = this.state
-
 		switch(type) {
 		case 'city':
 			if(visibility) {
@@ -138,6 +137,22 @@ class World extends Component {
 			this.svg.selectAll('.city-circle').raise()
 			this.svg.selectAll('.city-label').raise()
 			break
+		case 'hover':
+			if(!properties || !properties.HASC_1 || !visibility) return
+			this.svg.selectAll('.city-circle')
+			.data(cities.filter(city => properties.HASC_1.split('.').indexOf(city.parent) !== -1))
+			.enter().append('circle')
+			.attr('class', 'city-circle')
+			.attr('r', d => {
+				return Math.log(d.population) - 4
+			})
+			.attr('cx', function(d) {
+				return projection([d.long, d.lat])[0]
+			})
+			.attr('cy', function(d) {
+				return projection([d.long, d.lat])[1]
+			})
+			break
 		default:
 			console.warn('This shouldn\'t happen', type, visibility)
 		}
@@ -160,9 +175,8 @@ class World extends Component {
 		this.svg.selectAll('.eesti')
 			.data(eesti)
 			.enter().append('path')
-			.attr('class',
-			d => {
-				const name = 'eesti ' + (d.properties.NAME_3 || d.properties.NAME_2 || d.properties.NAME_1 || '').toLowerCase()
+			.attr('class', d => {
+				const name = 'eesti ' + (d.properties.TYPE_3 || d.properties.TYPE_2 || d.properties.TYPE_1 || '').toLowerCase()
 				return name
 			})
 			.attr('d', path)
@@ -187,7 +201,8 @@ class World extends Component {
 		}
 
 		const setActiveMapProperties = (properties) => {
-			this.setState({ activeMapProperties: properties })
+			this.setState({ activeMapProperties: properties },
+			() => this.updateCitiesVisibility('hover', true, properties ))
 		}
 	}
 
