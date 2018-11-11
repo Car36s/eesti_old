@@ -36,13 +36,13 @@ class World extends Component {
 		this.generateMap = this.generateMap.bind(this)
 		this.updateCitiesVisibility = this.updateCitiesVisibility.bind(this)
 		this.setActiveTile = this.setActiveTile.bind(this)
+		this.removeCities = this.removeCities.bind(this)
 	}
 
 	componentWillReceiveProps(nextProps) {
 		if(this.props.mapDetailLevel !== nextProps.mapDetailLevel) {
 			this.generateMap(nextProps.mapDetailLevel)
 		}
-
 		if(this.props.citiesVisibility !== nextProps.citiesVisibility) {
 			this.updateCitiesVisibility('city', nextProps.citiesVisibility)
 		}
@@ -152,15 +152,31 @@ class World extends Component {
 			.attr('cy', function(d) {
 				return projection([d.long, d.lat])[1]
 			})
+
+			this.svg.selectAll('.city-label')
+				.data(cities.filter(city => properties.HASC_1.split('.').indexOf(city.parent) !== -1))
+				.enter().append('text')
+				.attr('class', 'city-label')
+				.attr('x', d => {
+					return projection([d.long, d.lat])[0]
+				})
+				.attr('y', d => {
+					return projection([d.long, d.lat])[1]
+				})
+				.text(d => { return d.NAME_LOCAL })
+				.attr('dx', 7)
+				.attr('dy', 6)
 			break
 		default:
 			console.warn('This shouldn\'t happen', type, visibility)
 		}
+	}
 
-		const setActiveMapProperties = (properties) => {
-			this.setState({ activeMapProperties: properties })
+	removeCities(){
+		if (!this.props.citiesVisibility) {
+			this.svg.selectAll('.city-circle').remove()
+			this.svg.selectAll('.city-label').remove()
 		}
-
 	}
 
 	generateMap(mapDetailLevel = 0) {
@@ -189,6 +205,7 @@ class World extends Component {
 			})
 			.on('mouseout', function() {
 				d3.select(this).classed('eesti--active', false)
+				clearCities()
 			})
 
 		this.updateCitiesVisibility('update')
@@ -200,9 +217,15 @@ class World extends Component {
 			}
 		}
 
+		const clearCities = () => {
+			this.removeCities()
+		}
+
 		const setActiveMapProperties = (properties) => {
-			this.setState({ activeMapProperties: properties },
-			() => this.updateCitiesVisibility('hover', true, properties ))
+			this.setState({ activeMapProperties: properties }
+				// Does not work well with hovering cities 
+				,() => this.props.highlightCitiesOnHover &&  this.updateCitiesVisibility('hover', true, properties )
+			)
 		}
 	}
 
